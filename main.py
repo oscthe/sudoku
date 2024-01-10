@@ -1,5 +1,5 @@
 import pygame
-from board import Board
+from sudoku.board import Board
 
 
 # Initialize Pygame

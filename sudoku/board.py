@@ -1,6 +1,7 @@
 import pygame
 import yaml
-from gui import GUI
+from sudoku.gui import GUI
+from sudoku.algos import solve_sudoku
 
 class Board:
     def __init__(self):
@@ -16,7 +17,7 @@ class Board:
         pygame.display.set_caption("Sudoku Game")
         self.run()
 
-    def load_yaml(self, path: str = "config.yaml"):
+    def load_yaml(self, path: str = "sudoku/config.yaml"):
         """Loads the config.yaml file and sets the attributes of the Board class to the values in the file.
 
         Args:
@@ -55,13 +56,11 @@ class Board:
 
     def initialize_board(self):
         self.board = generate_board()
+        self.original_board = self.board.copy()
+        self.get_solution()
         self.original_position = [
             [True if number != 0 else False for number in row] for row in self.board
         ]
-
-    def _get_board_coordinates(self):
-        # Function for creating list of lists containing x and y coordinates for each position in grid
-        pass
 
     def draw_board(self):
         self.screen.fill(self.WHITE)
@@ -126,10 +125,14 @@ class Board:
         # Get the value at the given row and column
         pass
 
-
     def highlight_original_board(self):
         # Have button to highlight initial board numbers
         pass
+    
+    def get_solution(self):
+        # Solve the sudoku board
+        self.solution = solve_sudoku(self.original_board.copy())
+        print(self.solution)
 
 
 def generate_board():
