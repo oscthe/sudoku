@@ -1,4 +1,5 @@
 import pygame
+import yaml
 from gui import GUI
 
 # Define colors
@@ -15,9 +16,7 @@ CELL_SIZE = SCREEN_SIZE // GRID_SIZE
 class Board():
     
     def __init__(self):
-        self.GRID_SIZE = 9
-        self.CELL_SIZE = 80
-        self.FONT_SIZE = 72
+        self.load_yaml("config.yaml")
         self.background_color = WHITE
         self.board_width = self.GRID_SIZE * self.CELL_SIZE
         self.board_height = self.GRID_SIZE * self.CELL_SIZE
@@ -26,6 +25,12 @@ class Board():
         self.screen = pygame.display.set_mode(size=(self.screen_width, self.screen_height))
         pygame.display.set_caption("Sudoku Game")
         self.run()
+        
+    def load_yaml(self, path):
+        with open(path, "r") as file:
+            data = yaml.load(file, Loader=yaml.FullLoader)
+        for key, value in data.items():
+            setattr(self, key, value)
         
     def run(self, running: bool = True):
         
