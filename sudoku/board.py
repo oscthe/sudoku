@@ -5,7 +5,7 @@ from gui import GUI
 class Board:
     def __init__(self):
         self.load_yaml()
-        self.background_color = WHITE
+        self.background_color = self.WHITE
         self.board_width = self.GRID_SIZE * self.CELL_SIZE
         self.board_height = self.GRID_SIZE * self.CELL_SIZE
         self.screen_width = self.board_width
@@ -38,17 +38,15 @@ class Board:
                     running = False
                 elif (
                     event.type == pygame.MOUSEBUTTONDOWN
-                ):  # and self.is_valid_click(event.pos):
+                ):
                     row = event.pos[1] // self.CELL_SIZE
                     col = event.pos[0] // self.CELL_SIZE
-                    selected_cell = (row, col)
                 elif event.type == pygame.KEYDOWN and event.unicode.isdigit():
                     entered_number = int(event.unicode)
-                    if 1 <= entered_number <= 9:
+                    if 1 <= entered_number <= 9 and self.is_valid(row, col):
                         self.board[row][col] = entered_number
                         row = None
                         col = None
-                        selected_cell = (row, col)
 
             self.draw_board()
             self.draw_selected_cell(row, col)
@@ -66,7 +64,7 @@ class Board:
         pass
 
     def draw_board(self):
-        self.screen.fill(WHITE)
+        self.screen.fill(self.WHITE)
         number_font = pygame.font.Font(None, self.FONT_SIZE)
         for i in range(self.GRID_SIZE):
             thickness = 3 if i % 3 == 0 else 1
@@ -74,7 +72,7 @@ class Board:
             # Draw vertical line
             pygame.draw.line(
                 surface=self.screen,
-                color=BLACK,
+                color=self.BLACK,
                 start_pos=(0, length),
                 end_pos=(self.board_height, length),
                 width=thickness,
@@ -82,7 +80,7 @@ class Board:
             # Draw horizontal line
             pygame.draw.line(
                 surface=self.screen,
-                color=BLACK,
+                color=self.BLACK,
                 start_pos=(length, 0),
                 end_pos=(length, self.board_width),
                 width=thickness,
@@ -94,7 +92,7 @@ class Board:
                 value = self.board[row][col]
                 if value != 0:
                     font = pygame.font.Font(None, 72)
-                    text = font.render(str(value), True, BLACK)
+                    text = font.render(str(value), True, self.BLACK)
                     text_rect = text.get_rect(
                         center=(
                             col * self.CELL_SIZE + self.CELL_SIZE // 2,
@@ -107,14 +105,15 @@ class Board:
         if row is not None and col is not None:
             pygame.draw.rect(
                 surface=self.screen,
-                color=BLACK,
-                rect=(col * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE),
+                color=self.BLACK,
+                rect=(col * self.CELL_SIZE, row * self.CELL_SIZE, self.CELL_SIZE, self.CELL_SIZE),
                 width=3,
             )
 
     def is_valid(self, row, col):
         if not self.original_position[row][col]:
             return True
+        return False
 
     def is_valid_click(self, position):
         pass
@@ -127,9 +126,6 @@ class Board:
         # Get the value at the given row and column
         pass
 
-    def is_valid(self):
-        # Check if the current board configuration is valid
-        pass
 
     def highlight_original_board(self):
         # Have button to highlight initial board numbers
